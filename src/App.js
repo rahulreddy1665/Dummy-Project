@@ -1,24 +1,106 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { NotificationsProvider } from "@mantine/notifications"; // For show the notification import
+import { ColorSchemeProvider, MantineProvider } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
+// import ProtectedRoute from "./App/Components/ProtectRoute";
+import ErrorBoundary from "./App/Components/ErrorBoundary";
+import Sidebar from "./App/Components/Sidebar";
+
+import Login from "./App/screens/Authentication/login";
+
+import Home from "./App/screens/users/Home";
 
 function App() {
+  const toggleColorScheme = (value) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  const [colorScheme, setColorScheme] = useLocalStorage({
+    key: "mantine-color-scheme",
+    defaultValue: "light",
+  });
+  const [color] = useLocalStorage({
+    key: "color",
+    defaultValue: "#043c64",
+  });
+
+  const LightenDarkenColor = (col, amt) => {
+    var usePound = false;
+    if (col[0] === "#") {
+      col = col.slice(1);
+      usePound = true;
+    }
+    var num = parseInt(col, 16);
+    var r = (num >> 16) + amt;
+    if (r > 255) r = 255;
+    else if (r < 0) r = 0;
+    var b = ((num >> 8) & 0x00ff) + amt;
+    if (b > 255) b = 255;
+    else if (b < 0) b = 0;
+    var g = (num & 0x0000ff) + amt;
+    if (g > 255) g = 255;
+    else if (g < 0) g = 0;
+    return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    // Colorscheme provider is used for toggling between light and dark modes
+    <ColorSchemeProvider
+      // colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
+    >
+      {/* Mantine provider is used for customizing our own theme */}
+      <MantineProvider
+        theme={{
+          "::-webkit-scrollbar": {
+            backgroundColor: LightenDarkenColor(color, 120),
+            width: "5px",
+            height: "10px",
+            borderRadius: 5,
+          },
+          "::-webkit-scrollbar-thumb": {
+            backgroundColor: LightenDarkenColor(color, 120),
+            borderRadius: 5,
+            // "#D50000"
+          },
+          fontFamily: "Inter",
+          fontWeight: 300,
+          colorScheme,
+          colors: {
+            zevcore: [
+              LightenDarkenColor(color, 140),
+              LightenDarkenColor(color, 130),
+              LightenDarkenColor(color, 120),
+              LightenDarkenColor(color, 110),
+              LightenDarkenColor(color, 100),
+              LightenDarkenColor(color, 90),
+              LightenDarkenColor(color, 50),
+              LightenDarkenColor(color, 80),
+              LightenDarkenColor(color, 50),
+              LightenDarkenColor(color, 20),
+            ],
+          },
+        }}
+      >
+        <NotificationsProvider autoClose={3000}>
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+
+              <Route element={<Sidebar />}>
+                <Route
+                  exact
+                  path="/"
+                  element={
+                    // <ProtectedRoute>
+                    <Home />
+                    // </ProtectedRoute>
+                  }
+                />
+              </Route>
+            </Routes>
+          </ErrorBoundary>
+        </NotificationsProvider>
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 }
 
