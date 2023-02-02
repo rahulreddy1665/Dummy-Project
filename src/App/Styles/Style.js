@@ -103,7 +103,7 @@ const useStyles = createStyles((theme) => ({
       backgroundColor:
         theme.colorScheme === "dark"
           ? theme.colors.zevcore[5]
-          : theme.colors.zevcore[2],
+          : theme.colors.zevcore[0],
     },
   },
 
@@ -134,7 +134,7 @@ const useStyles = createStyles((theme) => ({
       backgroundColor:
         theme.colorScheme === "dark"
           ? theme.colors.zevcore[5]
-          : theme.colors.zevcore[2],
+          : theme.colors.zevcore[0],
       color:
         theme.colorScheme === "dark"
           ? theme.colors.zevcore[1]

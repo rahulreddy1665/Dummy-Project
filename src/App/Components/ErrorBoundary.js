@@ -51,7 +51,7 @@ class ErrorBoundary extends Component {
               some error occurred on this page cannot be able to render retry
               again or contact us.
             </p>
-            <Button mt={25} mb={50} onClick={this.handleClick}>
+            <Button mt={25} mb={50} color="zevcore" onClick={this.handleClick}>
               Return to home dashboard &nbsp; &nbsp;
               <ArrowBackUp />
             </Button>

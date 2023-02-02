@@ -5,11 +5,17 @@ import { ColorSchemeProvider, MantineProvider } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 // import ProtectedRoute from "./App/Components/ProtectRoute";
 import ErrorBoundary from "./App/Components/ErrorBoundary";
-import Sidebar from "./App/Components/Sidebar";
 
 import Login from "./App/screens/Authentication/login";
 
 import Home from "./App/screens/users/Home";
+import AppShellDemo from "./App/Components/Appshell";
+import ErrorPage from "./App/Components/ErrorPage";
+import Dashboard from "./App/screens/Dashboard/Dashboard";
+import Offers from "./App/screens/Dashboard/Offers";
+import Vlogs from "./App/screens/Dashboard/Vlogs";
+import Posts from "./App/screens/Posts";
+import ProtectedRoute from "./App/Components/ProtectedRoute";
 
 function App() {
   const toggleColorScheme = (value) =>
@@ -85,17 +91,42 @@ function App() {
             <Routes>
               <Route path="/login" element={<Login />} />
 
-              <Route element={<Sidebar />}>
+              <Route element={<AppShellDemo />}>
                 <Route
                   exact
                   path="/"
                   element={
-                    // <ProtectedRoute>
-                    <Home />
-                    // </ProtectedRoute>
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/offers"
+                  element={
+                    <ProtectedRoute>
+                      <Offers />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/vlogs"
+                  element={
+                    <ProtectedRoute>
+                      <Vlogs />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/posts"
+                  element={
+                    <ProtectedRoute>
+                      <Posts />
+                    </ProtectedRoute>
                   }
                 />
               </Route>
+              <Route path="*" element={<ErrorPage />} />
             </Routes>
           </ErrorBoundary>
         </NotificationsProvider>

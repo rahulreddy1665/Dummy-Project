@@ -1,18 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // for import react dom navigation components
-import {
-  Group,
-  Box,
-  Collapse,
-  ThemeIcon,
-  Text,
-  UnstyledButton,
-} from "@mantine/core"; //for import mantine required functions and theme
+import { useNavigate } from "react-router-dom";
+import { Group, Box, Collapse, ThemeIcon, UnstyledButton } from "@mantine/core"; //for import mantine required functions and theme
 import { CalendarStats, ChevronLeft, ChevronRight } from "tabler-icons-react";
-import useStyles from "../Styles/Style"; // For import thte styles
+import useStyles from "../Styles/Style"; // For importing the styles
 
 export function LinksGroup({ icon: Icon, label, links, link }) {
-  const { classes, theme } = useStyles();
+  const { classes, theme, cx } = useStyles();
   let navigate = useNavigate();
   const [active, setActive] = useState("Billing");
   const hasLinks = Array.isArray(links);
@@ -20,14 +13,19 @@ export function LinksGroup({ icon: Icon, label, links, link }) {
   const ChevronIcon = theme.dir === "ltr" ? ChevronRight : ChevronLeft;
   // For navgation links drop downs
   const items = (hasLinks ? links : []).map((link) => (
-    <Text
-      className={[classes.link, { [classes.linkActive]: link.link === active }]}
-      href={link.link}
-      onClick={() => handlePage(link.link)}
+    <a
+      className={cx(classes.link, {
+        [classes.linkActive]: link.label === active,
+      })}
+      onClick={(event) => {
+        event.preventDefault();
+        setActive(link.label);
+        navigate(link.link);
+      }}
       key={link.label}
     >
       {link.label}
-    </Text>
+    </a>
   ));
   // For handel the navigation route
   const handlePage = (e) => {
